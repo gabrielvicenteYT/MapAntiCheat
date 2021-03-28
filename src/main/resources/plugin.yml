@@ -1,0 +1,4 @@
+name: MapAntiCheat
+version: 1.0
+main: dev.map.anticheat.main.Main
+commands:
