@@ -9,11 +9,13 @@ import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class CPSDetection implements Listener {
 
 
-   public static int EntityClicks;
+
+   public static HashMap<UUID, Integer> Clicks = new HashMap<UUID, Integer>();
 
 
     @EventHandler
@@ -23,7 +25,13 @@ public class CPSDetection implements Listener {
 
         if (event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
             if (isDiggingMethod.isDigging(isDiggingMethod.Digging)) {
-                EntityClicks++;
+                if (Clicks.containsKey(player.getUniqueId())){
+                    Clicks.put(player.getUniqueId(), Clicks.get(player.getUniqueId()) + 1);
+
+                } else {
+                    Clicks.put(player.getUniqueId(), 0);
+                }
+
 
 
 
