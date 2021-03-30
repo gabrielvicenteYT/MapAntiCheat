@@ -1,7 +1,6 @@
 package dev.map.anticheat.autoclicker;
 
-import dev.map.anticheat.methods.isDiggingMethod;
-import org.bukkit.entity.Entity;
+import dev.map.anticheat.methods.DiggingListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +14,7 @@ public class CPSDetection implements Listener {
 
 
 
-   public static HashMap<UUID, Integer> Clicks = new HashMap<UUID, Integer>();
+   public static HashMap<UUID, Integer> clicks = new HashMap<UUID, Integer>();
 
 
     @EventHandler
@@ -24,12 +23,12 @@ public class CPSDetection implements Listener {
 
 
         if (event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
-            if (isDiggingMethod.isDigging(isDiggingMethod.Digging)) {
-                if (Clicks.containsKey(player.getUniqueId())){
-                    Clicks.put(player.getUniqueId(), Clicks.get(player.getUniqueId()) + 1);
+            if (DiggingListener.isDigging(DiggingListener.digging)) {
+                if (clicks.containsKey(player.getUniqueId())){
+                    clicks.put(player.getUniqueId(), clicks.get(player.getUniqueId()) + 1);
 
                 } else {
-                    Clicks.put(player.getUniqueId(), 0);
+                    clicks.put(player.getUniqueId(), 0);
                 }
 
 

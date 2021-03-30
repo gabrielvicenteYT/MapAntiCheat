@@ -21,7 +21,7 @@ public class CompassCPS implements Listener {
     private int taskID;
     private int clicks = 0;
     private int playerclicks;
-    private HashMap<UUID, Integer> isRunning = new HashMap<UUID, Integer>();
+    private HashMap<UUID, Boolean> playerIDisRunningMap = new HashMap<UUID, Boolean>();
 
     @EventHandler
     public void onClick(PlayerInteractEntityEvent event) {
@@ -32,10 +32,10 @@ public class CompassCPS implements Listener {
 
         if (target instanceof Player) {
             if (player.getItemInHand().getType().equals(Material.COMPASS)) {
-                if (!isRunning.containsKey(player.getUniqueId())) {
-                    isRunning.put(player.getUniqueId(), 0);
+                if (!playerIDisRunningMap.containsKey(player.getUniqueId())) {
+                    playerIDisRunningMap.put(player.getUniqueId(), false);
                 } else {
-                    if (isRunning.get(player.getUniqueId()) == 1) {
+                    if (playerIDisRunningMap.get(player.getUniqueId()) == true) {
                         player.sendMessage(ChatColor.RED + "Thread is already running.");
                     } else {
                         taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getPlugin(Main.class), new Runnable() {
@@ -46,23 +46,23 @@ public class CompassCPS implements Listener {
                             public void run() {
 
                                 if (index == 11) {
-                                    isRunning.put(player.getUniqueId(), 0);
-                                    CPSDetection.Clicks.put(target.getUniqueId(), 0);
+                                    playerIDisRunningMap.put(player.getUniqueId(), false);
+                                    CPSDetection.clicks.put(target.getUniqueId(), 0);
                                     index--;
-                                    isRunning.put(player.getUniqueId(), 1);
+                                    playerIDisRunningMap.put(player.getUniqueId(), true);
                                 } else if (index > 0 && index < 11) {
 
-                                    clicks = CPSDetection.Clicks.get(target.getUniqueId());
+                                    clicks = CPSDetection.clicks.get(target.getUniqueId());
                                     player.sendMessage(ChatColor.GRAY + "Clicks: " + ChatColor.DARK_AQUA + clicks);
                                     averageclicks = averageclicks + clicks;
-                                    CPSDetection.Clicks.put(target.getUniqueId(), 0);
+                                    CPSDetection.clicks.put(target.getUniqueId(), 0);
                                     index--;
                                 }
                                 if (index == 0) {
 
                                     player.sendMessage(target.getName() + ChatColor.GRAY + ": Had an average of " + ChatColor.DARK_AQUA + averageclicks / 10 + " CPS");
                                     Bukkit.getScheduler().cancelTask(taskID);
-                                    isRunning.put(player.getUniqueId(), 0);
+                                    playerIDisRunningMap.put(player.getUniqueId(), false);
                                 }
 
                             }
